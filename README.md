@@ -1,22 +1,16 @@
-# Welcome to your Lovable project
+# Interactive Spotlight Studio
 
-## Project info
+## Project Overview
 
-**URL**: https://lovable.dev/projects/c9eac9d1-c72f-49b3-a779-559440a96078
+This is an interactive web application built with modern web technologies.
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/c9eac9d1-c72f-49b3-a779-559440a96078) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +56,24 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/c9eac9d1-c72f-49b3-a779-559440a96078) and click on Share -> Publish.
+You can deploy this project to any hosting platform that supports static sites or Node.js applications, such as:
 
-## Can I connect a custom domain to my Lovable project?
+- Vercel
+- Netlify
+- GitHub Pages
+- AWS S3 + CloudFront
+- Firebase Hosting
 
-Yes, you can!
+## Development
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+To start the development server:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```sh
+npm run dev
+```
+
+To build for production:
+
+```sh
+npm run build
+```
