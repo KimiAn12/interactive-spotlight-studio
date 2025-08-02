@@ -17,14 +17,57 @@ import { useState } from "react";
 const Map = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedHospital, setSelectedHospital] = useState<any>(null);
+  const [filterType, setFilterType] = useState<string>("all");
+  const [userAddress, setUserAddress] = useState("");
+  
+  // Debug: Log when userAddress changes
+  useEffect(() => {
+    console.log('userAddress state changed:', userAddress);
+  }, [userAddress]);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [isGeocoding, setIsGeocoding] = useState(false);
+  const [geocodingError, setGeocodingError] = useState("");
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      setSelectedCity(searchQuery);
-      // Here you would typically integrate with a mapping API
-      console.log(`Searching for: ${searchQuery}`);
+  const filteredHospitals = torontoHospitals.filter(hospital => {
+    const matchesSearch = hospital.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         hospital.address.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = filterType === "all" || 
+                         (filterType === "emergency" && hospital.emergency) ||
+                         (filterType === "specialty" && !hospital.emergency);
+    return matchesSearch && matchesFilter;
+  });
+
+  const handleHospitalClick = (hospital: any) => {
+    setSelectedHospital(hospital);
+  };
+
+  const handleAddressSearch = async () => {
+    if (!userAddress.trim()) return;
+
+    setIsGeocoding(true);
+    setGeocodingError("");
+    
+    const coordinates = await geocodeAddress(userAddress);
+    
+    if (coordinates) {
+      setUserLocation(coordinates);
+      // Update map view to the new location
+      const mapElement = document.querySelector('.leaflet-container');
+      if (mapElement && (mapElement as any)._leaflet_map) {
+        (mapElement as any)._leaflet_map.setView(coordinates, 16);
+      }
+    } else {
+      setGeocodingError("Address not found. Please try a different address.");
     }
+    
+    setIsGeocoding(false);
+  };
+
+  const clearUserLocation = () => {
+    setUserLocation(null);
+    setUserAddress("");
+    setGeocodingError("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -65,30 +108,94 @@ const Map = () => {
             </h1>
           </div>
           
-          <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-8">
-            Explore cities around the world with our interactive mapping technology. 
-            Discover new places and plan your next adventure.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-6">
+            Find hospitals and medical facilities across Toronto. Click on markers for detailed information.
           </p>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-8">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
-              <input
-                type="text"
-                placeholder="Search for a city, country, or landmark..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-full pl-12 pr-4 py-4 bg-black/20 backdrop-blur-sm border border-white/10 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-primary/50 transition-colors"
-              />
-              <Button
-                onClick={handleSearch}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary hover:bg-primary/80"
-                size="sm"
+          {/* Address Input */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+              <h3 className="text-lg font-semibold mb-3 flex items-center">
+                <Target className="w-5 h-5 mr-2 text-primary" />
+                Find Your Location
+              </h3>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+                  <input
+                    type="text"
+                    placeholder="Enter your address (e.g., 123 Queen St, Toronto)"
+                    value={userAddress}
+                    onChange={(e) => {
+                      console.log('Input value changed:', e.target.value);
+                      setUserAddress(e.target.value);
+                    }}
+                    onKeyPress={handleKeyPress}
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    style={{ 
+                      position: 'relative', 
+                      zIndex: 50,
+                      backgroundColor: 'white',
+                      color: 'black'
+                    }}
+                  />
+                </div>
+                <Button
+                  onClick={handleAddressSearch}
+                  disabled={isGeocoding || !userAddress.trim()}
+                  className="bg-primary hover:bg-primary/80 disabled:opacity-50"
+                >
+                  {isGeocoding ? "Searching..." : "Find Location"}
+                </Button>
+                {userLocation && (
+                  <Button
+                    onClick={clearUserLocation}
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+              {geocodingError && (
+                <p className="text-red-600 text-sm mt-2">{geocodingError}</p>
+              )}
+              {userLocation && (
+                <p className="text-green-600 text-sm mt-2 flex items-center">
+                  <Target className="w-4 h-4 mr-1" />
+                  Location found! 50-meter radius shown on map.
+                </p>
+              )}
+              {/* Debug: Show current input value */}
+              <p className="text-blue-600 text-sm mt-2">
+                Debug - Current input value: "{userAddress}"
+              </p>
+            </div>
+          </div>
+
+          {/* Search and Filter Bar */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search hospitals by name or address..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               >
-                Search
-              </Button>
+                <option value="all">All Hospitals</option>
+                <option value="emergency">Emergency Only</option>
+                <option value="specialty">Specialty Centers</option>
+              </select>
             </div>
           </div>
         </div>
@@ -110,29 +217,69 @@ const Map = () => {
                     </div>
                   </div>
                   
-                  {/* Map Controls */}
-                  <div className="absolute top-4 right-4 flex flex-col space-y-2">
-                    <Button size="sm" variant="ghost" className="bg-black/20 hover:bg-black/40">
-                      <ZoomIn className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="ghost" className="bg-black/20 hover:bg-black/40">
-                      <ZoomOut className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="ghost" className="bg-black/20 hover:bg-black/40">
-                      <RotateCcw className="w-4 h-4" />
-                    </Button>
-                  </div>
-
-                  {/* Selected City Indicator */}
-                  {selectedCity && (
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="bg-primary/80 text-white px-3 py-1 rounded-full text-sm animate-pulse">
-                        <MapPin className="w-4 h-4 inline mr-1" />
-                        {selectedCity}
-                      </div>
-                    </div>
+                  {/* User Location Marker and Circle */}
+                  {userLocation && (
+                    <>
+                      <Marker
+                        position={userLocation as [number, number]}
+                        icon={userLocationIcon}
+                      >
+                        <Popup>
+                          <div className="p-2">
+                            <h3 className="font-semibold text-lg text-blue-600">Your Location</h3>
+                            <p className="text-sm text-gray-600">{userAddress}</p>
+                            <p className="text-sm text-gray-600 mt-2">
+                              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                                50m radius
+                              </span>
+                            </p>
+                          </div>
+                        </Popup>
+                      </Marker>
+                      <Circle
+                        center={userLocation as [number, number]}
+                        radius={50}
+                        pathOptions={{
+                          color: '#3b82f6',
+                          fillColor: '#3b82f6',
+                          fillOpacity: 0.1,
+                          weight: 2
+                        }}
+                      />
+                    </>
                   )}
-                </div>
+
+                  {/* Hospital Markers */}
+                  {filteredHospitals.map((hospital) => (
+                    <Marker
+                      key={hospital.id}
+                      position={hospital.coordinates as [number, number]}
+                      icon={hospitalIcon}
+                      eventHandlers={{
+                        click: () => handleHospitalClick(hospital),
+                      }}
+                    >
+                      <Popup>
+                        <div className="p-2">
+                          <h3 className="font-semibold text-lg">{hospital.name}</h3>
+                          <p className="text-sm text-gray-600">{hospital.address}</p>
+                          <p className="text-sm text-gray-600">{hospital.phone}</p>
+                          <div className="flex items-center mt-2">
+                            <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                              {hospital.type}
+                            </span>
+                            {hospital.emergency && (
+                              <span className="text-sm bg-red-100 text-red-800 px-2 py-1 rounded ml-2">
+                                Emergency
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  ))}
+                  <MapControls />
+                </MapContainer>
               </CardContent>
             </Card>
           </div>
@@ -224,6 +371,18 @@ const Map = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom CSS for map markers */}
+      <style>{`
+        .custom-hospital-marker {
+          background: transparent;
+          border: none;
+        }
+        .custom-user-marker {
+          background: transparent;
+          border: none;
+        }
+      `}</style>
     </div>
   );
 };
