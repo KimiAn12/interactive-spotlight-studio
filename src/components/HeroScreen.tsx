@@ -34,20 +34,20 @@ export const HeroScreen = () => {
           {/* Interactive Title - Centered in middle of screen with video background */}
           <div className="flex justify-center items-center min-h-screen relative">
             {/* Video Background for Title Section */}
-            <div className="absolute inset-0 w-full h-full">
+            <div className="absolute inset-0 w-full h-96 max-w-4xl mx-auto">
               <video
                 autoPlay
                 muted
                 loop
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-2xl"
                 style={{ objectPosition: 'center' }}
               >
                 <source src="/hero.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               {/* Overlay to ensure text readability */}
-              <div className="absolute inset-0 bg-black/30"></div>
+              <div className="absolute inset-0 bg-black/30 rounded-2xl"></div>
             </div>
             
             <div className="text-center relative z-10">

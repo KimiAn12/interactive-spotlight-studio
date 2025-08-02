@@ -52,7 +52,7 @@ export const Navigation = () => {
               Home
             </button>
             <button 
-              onClick={() => handleScrollToSection('yap-yap-section')}
+              onClick={() => handleNavigation('/intro')}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               Introduction
