@@ -199,6 +199,11 @@ const Map = () => {
   const [selectedHospital, setSelectedHospital] = useState<any>(null);
   const [filterType, setFilterType] = useState<string>("all");
   const [userAddress, setUserAddress] = useState("");
+  
+  // Debug: Log when userAddress changes
+  useEffect(() => {
+    console.log('userAddress state changed:', userAddress);
+  }, [userAddress]);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [geocodingError, setGeocodingError] = useState("");
@@ -227,9 +232,9 @@ const Map = () => {
     if (coordinates) {
       setUserLocation(coordinates);
       // Update map view to the new location
-      const map = document.querySelector('.leaflet-container')?._leaflet_map;
-      if (map) {
-        map.setView(coordinates, 16);
+      const mapElement = document.querySelector('.leaflet-container');
+      if (mapElement && (mapElement as any)._leaflet_map) {
+        (mapElement as any)._leaflet_map.setView(coordinates, 16);
       }
     } else {
       setGeocodingError("Address not found. Please try a different address.");
@@ -278,14 +283,23 @@ const Map = () => {
               </h3>
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
                   <input
                     type="text"
                     placeholder="Enter your address (e.g., 123 Queen St, Toronto)"
                     value={userAddress}
-                    onChange={(e) => setUserAddress(e.target.value)}
+                    onChange={(e) => {
+                      console.log('Input value changed:', e.target.value);
+                      setUserAddress(e.target.value);
+                    }}
                     onKeyPress={handleKeyPress}
                     className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    style={{ 
+                      position: 'relative', 
+                      zIndex: 50,
+                      backgroundColor: 'white',
+                      color: 'black'
+                    }}
                   />
                 </div>
                 <Button
@@ -315,6 +329,10 @@ const Map = () => {
                   Location found! 50-meter radius shown on map.
                 </p>
               )}
+              {/* Debug: Show current input value */}
+              <p className="text-blue-600 text-sm mt-2">
+                Debug - Current input value: "{userAddress}"
+              </p>
             </div>
           </div>
 
@@ -364,7 +382,7 @@ const Map = () => {
                   {userLocation && (
                     <>
                       <Marker
-                        position={userLocation}
+                        position={userLocation as [number, number]}
                         icon={userLocationIcon}
                       >
                         <Popup>
@@ -380,7 +398,7 @@ const Map = () => {
                         </Popup>
                       </Marker>
                       <Circle
-                        center={userLocation}
+                        center={userLocation as [number, number]}
                         radius={50}
                         pathOptions={{
                           color: '#3b82f6',
@@ -396,7 +414,7 @@ const Map = () => {
                   {filteredHospitals.map((hospital) => (
                     <Marker
                       key={hospital.id}
-                      position={hospital.coordinates}
+                      position={hospital.coordinates as [number, number]}
                       icon={hospitalIcon}
                       eventHandlers={{
                         click: () => handleHospitalClick(hospital),
@@ -580,7 +598,7 @@ const Map = () => {
       </div>
 
       {/* Custom CSS for map markers */}
-      <style jsx>{`
+      <style>{`
         .custom-hospital-marker {
           background: transparent;
           border: none;
