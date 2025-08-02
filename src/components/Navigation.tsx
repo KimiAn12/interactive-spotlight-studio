@@ -46,16 +46,22 @@ export const Navigation = () => {
           {/* Navigation Links - Centered */}
           <div className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
             <button 
+              onClick={() => handleNavigation('/')}
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              Home
+            </button>
+            <button 
               onClick={() => handleScrollToSection('yap-yap-section')}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              About
+              Introduction
             </button>
             <button 
-              onClick={() => handleScrollToSection('feature-cards-section')}
+              onClick={() => handleNavigation('/map')}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              Features
+              Map
             </button>
             <button 
               onClick={() => handleNavigation('/team')}
@@ -63,24 +69,6 @@ export const Navigation = () => {
             >
               Team
             </button>
-            <button 
-              onClick={() => handleScrollToSection('yap-yap-section')}
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              Contact
-            </button>
-            <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
-              Home
-            </a>
-            <a href="/intro" className="text-muted-foreground hover:text-primary transition-colors">
-              Introduction
-            </a>
-            <a href="#map" className="text-muted-foreground hover:text-primary transition-colors">
-              Map
-            </a>
-            <a href="#team" className="text-muted-foreground hover:text-primary transition-colors">
-              Team
-            </a>
           </div>
           
           {/* CTA Button */}
