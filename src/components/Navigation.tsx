@@ -69,6 +69,18 @@ export const Navigation = () => {
             >
               Contact
             </button>
+            <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
+              Home
+            </a>
+            <a href="/intro" className="text-muted-foreground hover:text-primary transition-colors">
+              Introduction
+            </a>
+            <a href="#map" className="text-muted-foreground hover:text-primary transition-colors">
+              Map
+            </a>
+            <a href="#team" className="text-muted-foreground hover:text-primary transition-colors">
+              Team
+            </a>
           </div>
           
           {/* CTA Button */}
