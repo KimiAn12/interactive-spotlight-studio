@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { FloatingParticles } from "./FloatingParticles";
 import { InteractiveTitle } from "./InteractiveTitle";
 import { GlowingCard } from "./GlowingCard";
+import { Navigation } from "./Navigation";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
 
 export const HeroScreen = () => {
@@ -14,23 +15,46 @@ export const HeroScreen = () => {
     console.log("Learn More clicked!");
   };
 
+  const scrollToYapYap = () => {
+    const yapYapSection = document.getElementById('yap-yap-section');
+    if (yapYapSection) {
+      yapYapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden hero-gradient">
       <FloatingParticles />
       
-      {/* Main Hero Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
-        <div className="max-w-6xl mx-auto">
-          {/* Interactive Title - Centered in middle of screen */}
-          <div className="flex justify-center items-center min-h-screen">
-            <InteractiveTitle 
-              text="Make Healthcare More Accessible"
-              className="text-center"
-            />
-          </div>
+      <Navigation />
+      
+             {/* Main Hero Content */}
+       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
+         <div className="max-w-6xl mx-auto">
+           {/* Interactive Title - Centered in middle of screen */}
+           <div className="flex justify-center items-center min-h-screen">
+             <div className="text-center">
+               <InteractiveTitle 
+                 text="ProjectRed"
+                 className="text-center"
+               />
+               
+                               {/* Scroll Button below title */}
+                <div className="mt-40">
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    onClick={scrollToYapYap}
+                    className="w-12 h-12 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 animate-bounce"
+                  >
+                    <ArrowRight className="w-6 h-6 rotate-90 text-primary" />
+                  </Button>
+                </div>
+             </div>
+           </div>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p id="yap-yap-section" className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed mt-32">
             Yap Yap, 
             Yap Yap.
           </p>
@@ -57,7 +81,7 @@ export const HeroScreen = () => {
           </div>
 
           {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-20">
+          <div id="feature-cards-section" className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-20">
             <GlowingCard className="animate-bounce-in" style={{ animationDelay: '0.2s' }}>
               <div className="text-center">
                 <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -95,48 +119,8 @@ export const HeroScreen = () => {
             </GlowingCard>
           </div>
 
-          {/* Additional Content Section */}
-          <div className="max-w-4xl mx-auto mb-20">
-            <h2 className="text-3xl font-bold text-center mb-8">Why Choose Our Platform?</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="text-center">
-                <h3 className="text-xl font-semibold mb-4">Comprehensive Coverage</h3>
-                <p className="text-muted-foreground">
-                  Access to healthcare facilities, pharmacies, and emergency services across your entire city.
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-xl font-semibold mb-4">Real-time Updates</h3>
-                <p className="text-muted-foreground">
-                  Get live information about wait times, availability, and service status.
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Call to Action Section */}
-          <div className="text-center mb-20">
-            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Join thousands of users who are already mapping their healthcare journey.
-            </p>
-            <Button 
-              variant="hero" 
-              size="lg"
-              onClick={handleGetStarted}
-              className="animate-pulse-glow"
-            >
-              Start Mapping Now
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-primary rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse"></div>
+          
         </div>
       </div>
     </div>
