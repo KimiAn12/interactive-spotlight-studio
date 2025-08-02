@@ -28,30 +28,47 @@ export const HeroScreen = () => {
       
       <Navigation />
       
-             {/* Main Hero Content */}
-       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
-         <div className="max-w-6xl mx-auto">
-           {/* Interactive Title - Centered in middle of screen */}
-           <div className="flex justify-center items-center min-h-screen">
-             <div className="text-center">
-               <InteractiveTitle 
-                 text="ProjectRed"
-                 className="text-center"
-               />
-               
-                               {/* Scroll Button below title */}
-                <div className="mt-40">
-                  <Button
-                    variant="ghost"
-                    size="lg"
-                    onClick={scrollToYapYap}
-                    className="w-12 h-12 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 animate-bounce"
-                  >
-                    <ArrowRight className="w-6 h-6 rotate-90 text-primary" />
-                  </Button>
-                </div>
-             </div>
-           </div>
+      {/* Main Hero Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
+        <div className="max-w-6xl mx-auto">
+          {/* Interactive Title - Centered in middle of screen with video background */}
+          <div className="flex justify-center items-center min-h-screen relative">
+            {/* Video Background for Title Section */}
+            <div className="absolute inset-0 w-full h-full">
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+                style={{ objectPosition: 'center' }}
+              >
+                <source src="/hero.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              {/* Overlay to ensure text readability */}
+              <div className="absolute inset-0 bg-black/30"></div>
+            </div>
+            
+            <div className="text-center relative z-10">
+              <InteractiveTitle 
+                text="ProjectRed"
+                className="text-center"
+              />
+              
+              {/* Scroll Button below title */}
+              <div className="mt-40">
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  onClick={scrollToYapYap}
+                  className="w-12 h-12 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 animate-bounce"
+                >
+                  <ArrowRight className="w-6 h-6 rotate-90 text-primary" />
+                </Button>
+              </div>
+            </div>
+          </div>
 
           {/* Subtitle */}
           <p id="yap-yap-section" className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -123,9 +140,6 @@ export const HeroScreen = () => {
               </div>
             </GlowingCard>
           </div>
-
-
-          
         </div>
       </div>
     </div>

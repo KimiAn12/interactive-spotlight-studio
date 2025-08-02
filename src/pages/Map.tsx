@@ -19,7 +19,7 @@ import {
   X
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -254,18 +254,6 @@ const Map = () => {
     }
   };
 
-  const handleHospitalSearch = (query: string) => {
-    setSearchQuery(query);
-    // If there's only one result, automatically select it
-    const results = torontoHospitals.filter(hospital => 
-      hospital.name.toLowerCase().includes(query.toLowerCase()) ||
-      hospital.address.toLowerCase().includes(query.toLowerCase())
-    );
-    if (results.length === 1 && query.length > 2) {
-      handleHospitalClick(results[0]);
-    }
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Navigation */}
@@ -370,7 +358,6 @@ const Map = () => {
                   center={[43.6532, -79.3832]}
                   zoom={12}
                   style={{ height: '100%', width: '100%' }}
-                  ref={mapRef}
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
