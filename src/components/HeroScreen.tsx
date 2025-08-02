@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { FloatingParticles } from "./FloatingParticles";
 import { InteractiveTitle } from "./InteractiveTitle";
@@ -20,24 +21,18 @@ export const HeroScreen = () => {
       {/* Main Hero Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-6xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-bounce-in">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Built with Lovable</span>
-          </div>
-
-          {/* Interactive Title */}
-          <div className="mb-6">
+          {/* Interactive Title - Centered in middle of screen */}
+          <div className="flex justify-center items-center min-h-screen">
             <InteractiveTitle 
-              text="Create Magic"
-              className="mb-4"
+              text="Make Healthcare More Accessible"
+              className="text-center"
             />
           </div>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-            Experience the future of interactive web design with stunning animations, 
-            responsive layouts, and cutting-edge technology.
+            Yap Yap, 
+            Yap Yap.
           </p>
 
           {/* CTA Buttons */}
@@ -48,7 +43,7 @@ export const HeroScreen = () => {
               onClick={handleGetStarted}
               className="animate-pulse-glow"
             >
-              Get Started
+              Map Your City
               <ArrowRight className="w-5 h-5" />
             </Button>
             <Button 
@@ -62,7 +57,7 @@ export const HeroScreen = () => {
           </div>
 
           {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-20">
             <GlowingCard className="animate-bounce-in" style={{ animationDelay: '0.2s' }}>
               <div className="text-center">
                 <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -98,6 +93,42 @@ export const HeroScreen = () => {
                 </p>
               </div>
             </GlowingCard>
+          </div>
+
+          {/* Additional Content Section */}
+          <div className="max-w-4xl mx-auto mb-20">
+            <h2 className="text-3xl font-bold text-center mb-8">Why Choose Our Platform?</h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="text-center">
+                <h3 className="text-xl font-semibold mb-4">Comprehensive Coverage</h3>
+                <p className="text-muted-foreground">
+                  Access to healthcare facilities, pharmacies, and emergency services across your entire city.
+                </p>
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl font-semibold mb-4">Real-time Updates</h3>
+                <p className="text-muted-foreground">
+                  Get live information about wait times, availability, and service status.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Call to Action Section */}
+          <div className="text-center mb-20">
+            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Join thousands of users who are already mapping their healthcare journey.
+            </p>
+            <Button 
+              variant="hero" 
+              size="lg"
+              onClick={handleGetStarted}
+              className="animate-pulse-glow"
+            >
+              Start Mapping Now
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
         </div>
       </div>
